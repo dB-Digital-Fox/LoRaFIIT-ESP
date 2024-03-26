@@ -1,25 +1,25 @@
 #ifndef DH_h
 #define DH_h
 
-#define PRIME0 	0xFB
-#define PRIME1 	0xFF 
-#define PRIME2 	0xFF 
-#define PRIME3 	0xFF 
+#define PRIME0 	0x1B
+#define PRIME1 	0x89 
+#define PRIME2 	0xB7 
+#define PRIME3 	0xE5 
 
-#define PRIME4 	0xFB
-#define PRIME5 	0xFF 
-#define PRIME6 	0xFF 
-#define PRIME7 	0xFF 
+#define PRIME4 	0xAF
+#define PRIME5 	0x12 
+#define PRIME6 	0xF1 
+#define PRIME7 	0xEE 
 
-#define PRIME8 	0xFB
-#define PRIME9 	0xFF 
-#define PRIME10 0xFF 
-#define PRIME11 0xFF 
+#define PRIME8 	0x38
+#define PRIME9 	0x89 
+#define PRIME10 0x21 
+#define PRIME11 0x84 
 
-#define PRIME12 0xFB 
-#define PRIME13 0xFF 
-#define PRIME14 0xFF 
-#define PRIME15 0xFF 
+#define PRIME12 0x0A 
+#define PRIME13 0xB3 
+#define PRIME14 0x4F 
+#define PRIME15 0x64 
 
 #define GENERATOR0 0x02
 #define GENERATOR1 0x00

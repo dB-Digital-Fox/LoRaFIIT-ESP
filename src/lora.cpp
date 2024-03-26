@@ -1339,7 +1339,7 @@ uint32_t lora::WaitDutyCycle(uint8_t len, float bw, uint8_t sf, uint8_t cr, uint
 		payloadSymbNb = temp;
 	}
 	
-	float payload = 8 + max(payloadSymbNb*cr, 0);
+	float payload = 8 + max(payloadSymbNb*cr, (float)(0.0));
 	payload *= tsymbol;
 
 	uint32_t timeOffAir = 0;

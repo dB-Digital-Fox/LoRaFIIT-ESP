@@ -6,10 +6,12 @@
 
 #include "RHHardwareSPI.h"
 
+
 // Declare a single default instance of the hardware SPI interface class
 RHHardwareSPI hardware_spi;
 
 #ifdef RH_HAVE_HARDWARE_SPI
+#include "SPI.h"
 
 #if (RH_PLATFORM == RH_PLATFORM_STM32) // Maple etc
 // Declare an SPI interface to use
@@ -46,14 +48,14 @@ uint8_t RHHardwareSPI::transfer(uint8_t data)
 void RHHardwareSPI::attachInterrupt() 
 {
 #if (RH_PLATFORM == RH_PLATFORM_ARDUINO)
-    SPI.attachInterrupt();
+    //SPI.attachInterrupt();
 #endif
 }
 
 void RHHardwareSPI::detachInterrupt() 
 {
 #if (RH_PLATFORM == RH_PLATFORM_ARDUINO)
-    SPI.detachInterrupt();
+    //SPI.detachInterrupt();
 #endif
 }
     

@@ -8,9 +8,9 @@
 #include <EEPROM.h>
 #include <math.h>
 
-#define MAB_UCB_ENABLED 1
+#define MAB_UCB_ENABLED 0
 #define MAB_TS_ENABLED 0
-#define CAD_ENABLED 1
+#define CAD_ENABLED 0
 #define MANUAL_ENABLED 0
 #define CSV_OUTPUT 0
 

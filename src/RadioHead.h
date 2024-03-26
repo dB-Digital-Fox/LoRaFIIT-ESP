@@ -739,7 +739,7 @@
 
 #ifndef RadioHead_h
 #define RadioHead_h
-
+#endif
 // Official version numbers are maintained automatically by Makefile:
 #define RH_VERSION_MAJOR 1
 #define RH_VERSION_MINOR 74
@@ -760,6 +760,8 @@
 #define RH_PLATFORM_STM32F2          12
 #define RH_PLATFORM_CHIPKIT_CORE     13
 
+#define RH_PLATFORM_ESPIDF           14 // ESP-IDF
+
 ////////////////////////////////////////////////////
 // Select platform automatically, if possible
 #ifndef RH_PLATFORM
@@ -779,6 +781,8 @@
   #define RH_PLATFORM RH_PLATFORM_MSP430
  #elif defined(MCU_STM32F103RE)
   #define RH_PLATFORM RH_PLATFORM_STM32
+ #elif defined(ESP_PLATFORM) // ESP-IDF specific
+  #define RH_PLATFORM RH_PLATFORM_ESPIDF
  #elif defined(STM32F2XX)
   #define RH_PLATFORM RH_PLATFORM_STM32F2
  #elif defined(USE_STDPERIPH_DRIVER)
@@ -815,6 +819,25 @@
   #define RH_HAVE_HARDWARE_SPI
   #define RH_HAVE_SERIAL
  #endif
+
+#if (RH_PLATFORM == RH_PLATFORM_ESPIDF) // ESP-IDF
+// not neccesary of we define them manually in the main.cpp file
+  #include "esp_system.h"           // esp_err_t
+  #include "esp_wifi.h"             // esp_err_t
+  #include "esp_event.h"            // esp_event_loop_create_default()
+  #include "esp_event_loop.h"       // esp_event_loop_create_default()
+  #include "esp_log.h"              // ESP_LOGE, ESP_LOGI, ESP_LOGW, ESP_LOGD, ESP_LOGC, ESP_LOGE
+  #include "esp_system.h"           // esp_sleep_enable_timer_wakeup(), esp_sleep_disable_timer_wakeup()
+  #include "driver/gpio.h"          // gpio_set_direction(), gpio_set_level()
+  #include "driver/spi_master.h"    // spi_device_interface_config_t, spi_bus_initialize()
+  #include "driver/uart.h"          // uart_driver_install(), uart_set_baudrate()
+  #include "soc/gpio_reg.h"         // PIN_FUNC_SELECT
+  #include "soc/spi_reg.h"          // SPI_SLAVE_DUAL_DATA_OUT_ADDRESS
+  #include "soc/gpio_struct.h"      // gpio_num_t
+  #include "soc/spi_struct.h"       // spi_device_handle_t
+  #include "esp_spi_flash.h"        // ESP\_SPI\_FLASH\_RESULT
+  #include <stdio.h>                // printf(), vsnprintf()
+  #include <string.h>               // memset(), strlen()
 
 #elif (RH_PLATFORM == RH_PLATFORM_ESP8266) // ESP8266 processor on Arduino IDE
  #include <Arduino.h>
@@ -906,8 +929,8 @@
  #define RH_HAVE_SERIAL
 //#include <netinet/in.h> // For htons and friends
 #include <winsock2.h>
-#else
- #error Platform unknown!
+//#else
+ //#error Platform unknown!
 #endif
 
 ////////////////////////////////////////////////////
@@ -916,10 +939,14 @@
 #if defined(__arm__)
   #include <RHutil/atomic.h>
  #else
-  #include <util/atomic.h>
+  #include <esp_intr_alloc.h>
  #endif
- #define ATOMIC_BLOCK_START     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
- #define ATOMIC_BLOCK_END }
+  #define ATOMIC_BLOCK_START portENTER_CRITICAL(&critical_nesting)
+  #define ATOMIC_BLOCK_END portEXIT_CRITICAL(&critical_nesting)
+  #ifndef CRITICAL_NESTING_DEFINED // Check if critical_nesting is already defined
+  #define CRITICAL_NESTING_DEFINED
+    portMUX_TYPE critical_nesting = portMUX_INITIALIZER_UNLOCKED;
+  #endif
 #elif (RH_PLATFORM == RH_PLATFORM_CHIPKIT_CORE)
  // UsingChipKIT Core on Arduino IDE
  #define ATOMIC_BLOCK_START unsigned int __status = disableInterrupts(); {
